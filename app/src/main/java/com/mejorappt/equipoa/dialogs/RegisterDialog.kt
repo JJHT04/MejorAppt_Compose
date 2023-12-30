@@ -37,7 +37,7 @@ import com.mejorappt.equipoa.util.UserNameTextField
 import kotlinx.coroutines.launch
 
 private var userName by mutableStateOf("")
-private var gender by mutableStateOf(Gender.NON_BINARY)
+private var gender by mutableStateOf(Gender.MALE)
 private var age by mutableIntStateOf(0)
 
 @Composable
