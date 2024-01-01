@@ -127,7 +127,6 @@ fun GenderDropdown(onValueChange: (String) -> Unit) {
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(5.dp)
     ) {
         ExposedDropdownMenuBox(
@@ -177,7 +176,6 @@ fun GenderDropdown(selectedText: MutableState<String>, onValueChange: (String) -
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(5.dp)
     ) {
         ExposedDropdownMenuBox(
