@@ -1,5 +1,6 @@
 package com.mejorappt.equipoa.model
 
+import android.icu.text.DateFormat
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
@@ -12,8 +13,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.enums.Gender
+import java.text.SimpleDateFormat
+import java.util.Date
 
-data class UserProfile(val id: Int, val userName:String, val age:Int, val gender: Gender, @DrawableRes val happyIcon: Int, @DrawableRes val annoyedIcon:Int) {
+data class UserProfile(val id: Int, val userName:String, val age:Int, val gender: Gender, @DrawableRes val happyIcon: Int, @DrawableRes val annoyedIcon:Int, val date: Date = Date(), var uploaded: Int = 0) {
 
     @Composable
     fun HappyIcon(mirrored: Boolean = false) {
@@ -38,6 +41,14 @@ data class UserProfile(val id: Int, val userName:String, val age:Int, val gender
     fun userExists(): Boolean {
         return userName.isNotBlank()
     }
+
+    fun formatDate(): String = SimpleDateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(date)
+
+    fun map(): Map<String, Any> = hashMapOf(
+        "name" to userName,
+        "age" to age,
+        "gender" to gender.toString()
+    )
 
     companion object {
         val EMPTY_USER = UserProfile(0, "", 0, Gender.NON_BINARY, R.drawable.non_binary_icon_happy, R.drawable.non_binary_icon_annoyed)

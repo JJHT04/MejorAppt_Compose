@@ -33,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.db.UserDAO
 import com.mejorappt.equipoa.enums.Gender
+import com.mejorappt.equipoa.firebase.FirebaseUser
 import com.mejorappt.equipoa.model.UserProfile
 import com.mejorappt.equipoa.userProfile
 import com.mejorappt.equipoa.util.AgeTextField
@@ -114,7 +115,7 @@ fun ModifyDialog(
                             if (user.userName != userName || user.age != age || user.gender != gender) {
                                 val userDAO = UserDAO(context)
 
-                                val userAux = UserProfile(user.id, userName, age, gender, user.happyIcon, user.annoyedIcon)
+                                val userAux = UserProfile(user.id, userName, age, gender, user.happyIcon, user.annoyedIcon, user.date, 3)
 
                                 userDAO.update(userAux)
 
@@ -126,7 +127,7 @@ fun ModifyDialog(
                                     userProfile = userAux
                                 }
 
-                                //TODO FIREBASE -> Modify user profile = userProfile.userName, userProfile.age, userProfile.gender.toString()
+                                FirebaseUser(context).update(userAux)
 
                                 onConfirmation()
                             } else {

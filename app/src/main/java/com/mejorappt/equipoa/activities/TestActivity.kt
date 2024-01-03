@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.db.QuestionDAO
 import com.mejorappt.equipoa.db.ResultDAO
+import com.mejorappt.equipoa.firebase.FirebaseResult
 import com.mejorappt.equipoa.model.Question
 import com.mejorappt.equipoa.model.Result
 import com.mejorappt.equipoa.testStarted
@@ -180,7 +181,7 @@ class TestActivity : ComponentActivity() {
 
         resultDAO.insert(result)
 
-        //TODO FIREBASE -> Insert result = userProfile.userName, result.date, sumFactors[0], sumFactors[1], sumFactors[2], uploaded?
+        FirebaseResult(this).insert(result)
 
         val levels = ResultCalculator.calculateResult(sumFactors)
 

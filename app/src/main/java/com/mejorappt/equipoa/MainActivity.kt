@@ -69,6 +69,8 @@ import com.mejorappt.equipoa.db.UserDAO
 import com.mejorappt.equipoa.dialogs.ModifyDialog
 import com.mejorappt.equipoa.dialogs.RegisterDialog
 import com.mejorappt.equipoa.dialogs.UserListDialog
+import com.mejorappt.equipoa.firebase.FirebaseResult
+import com.mejorappt.equipoa.firebase.FirebaseUser
 import com.mejorappt.equipoa.model.UserProfile
 import com.mejorappt.equipoa.ui.theme.MejorApptTheme
 import com.mejorappt.equipoa.ui.theme.OnPrimary
@@ -93,6 +95,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseUser(this).synchronize()
+        FirebaseResult(this).synchronize()
 
         val questionDAO = QuestionDAO(this)
         testStarted = questionDAO.isAnyQuestionAnswered()
@@ -448,7 +453,7 @@ class MainActivity : ComponentActivity() {
             val userAux = userProfile.copy(happyIcon = iconHappy, annoyedIcon = iconAnnoyed)
 
             scope.launch {
-                DataStoreUtil.saveData(context, iconHappy, iconAnnoyed)
+                DataStoreUtil.saveData(context, iconHappy)
             }
 
             userProfile = userAux

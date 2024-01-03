@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "110026689288",
+    "project_id": "compose-prueba",
+    "storage_bucket": "compose-prueba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110026689288:android:42b7e0c44a44840a74babd",
+        "android_client_info": {
+          "package_name": "com.mejorappt.equipoa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR3Ed6quAyQ-yzFQsFBqp3tcXbdbUo3jU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -28,6 +28,7 @@ import androidx.compose.ui.window.Dialog
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.db.UserDAO
 import com.mejorappt.equipoa.enums.Gender
+import com.mejorappt.equipoa.firebase.FirebaseUser
 import com.mejorappt.equipoa.model.UserProfile
 import com.mejorappt.equipoa.userProfile
 import com.mejorappt.equipoa.util.AgeTextField
@@ -104,7 +105,14 @@ fun RegisterDialog(
                             val maxID = userDAO.getMaxId()
 
                             scope.launch {
-                                DataStoreUtil.saveData(context, maxID, userName, age, gender, getIconHappy(), getIconAnnoyed())
+                                DataStoreUtil.saveData(
+                                    context,
+                                    maxID,
+                                    userName,
+                                    age,
+                                    gender,
+                                    getIconHappy()
+                                )
                             }
 
                             val userprofile = UserProfile(maxID, userName, age, gender, getIconHappy(), getIconAnnoyed())
@@ -112,7 +120,7 @@ fun RegisterDialog(
                             userDAO.insert(userprofile)
                             userProfile = userprofile
 
-                            //TODO FIREBASE -> Insert user = profile.userName, userProfile.age, userProfile.gender.toString()
+                            FirebaseUser(context).insert(userprofile)
 
                             onConfirmation()
                         },
