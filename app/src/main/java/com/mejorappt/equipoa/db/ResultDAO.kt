@@ -124,4 +124,22 @@ class ResultDAO(context: Context): DAO<Int, Result> {
 
         return ++id
     }
+
+    fun getAsync(): List<Result> {
+
+        val results = ArrayList<Result>()
+        val db = bh.readableDatabase
+        val c = db.rawQuery("SELECT id, userName, date, factor1, factor2, factor3, uploaded FROM result WHERE uploaded = 0", null)
+
+        if (c.moveToFirst()) {
+            do {
+                results.add(Result(c.getInt(0), userDAO.get(c.getInt(1)), Result.parseDate(c.getString(2))?:Date(), c.getInt(3), c.getInt(4), c.getInt(5), c.getInt(6) == 1))
+            } while (c.moveToNext())
+        }
+
+        c.close()
+        db.close()
+        return results
+
+    }
 }

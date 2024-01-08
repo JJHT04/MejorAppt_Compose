@@ -267,10 +267,10 @@ fun HtmlText(html: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun DropDownCard(title: String, expandedContent: @Composable (BoxScope.() -> Unit)) {
+fun DropDownCard(title: String, maxHeight: Float = 200f, expandedContent: @Composable (BoxScope.() -> Unit)) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     val heightState = animateFloatAsState(
-        targetValue = if (expanded) 200f else 50f,
+        targetValue = if (expanded) maxHeight else 50f,
         animationSpec = tween(durationMillis = 300), label = ""
     )
 

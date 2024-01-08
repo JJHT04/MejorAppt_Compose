@@ -138,6 +138,24 @@ class UserDAO(context: Context): DAO<Int, UserProfile>{
 
     fun userAlreadyExists(userName: String): Boolean = get(userName) != null
 
+    fun getAsync(): List<UserProfile> {
+        val users = ArrayList<UserProfile>()
+        val db = bh.readableDatabase
+        @Language("SQL")
+        val c = db.rawQuery("SELECT id, name, age, gender, icon, date, uploaded FROM user WHERE uploaded = 0 or uploaded = 3", null)
+
+        if (c.moveToFirst()) {
+            do {
+                val icons = getDrawableRes(c.getString(4))
+                users.add(UserProfile(c.getInt(0), c.getString(1), c.getInt(2), genderMap[c.getString(3)]?:Gender.NON_BINARY, icons.first, icons.second, SimpleDateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).parse(c.getString(5))?: Date(), c.getInt(6)))
+            } while (c.moveToNext())
+        }
+
+        c.close()
+        db.close()
+        return users
+    }
+
     companion object {
         private const val FEMALE_ICON_NAME = "female1"
         private const val FEMALE2_ICON_NAME = "female2"

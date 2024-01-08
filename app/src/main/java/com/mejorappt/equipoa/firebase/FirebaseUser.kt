@@ -40,7 +40,7 @@ class FirebaseUser(private val context: Context): Firebase<UserProfile> {
 
     override fun synchronize() {
         val userDAO = UserDAO(context)
-        val users = userDAO.getAll()
+        val users = userDAO.getAsync()
 
         users.forEach {
             if (it.uploaded == 0) {

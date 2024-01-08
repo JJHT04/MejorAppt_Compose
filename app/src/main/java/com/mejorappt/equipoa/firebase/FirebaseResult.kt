@@ -25,12 +25,12 @@ class FirebaseResult(private val context: Context): Firebase<Result> {
 
     override fun synchronize() {
         val resultDAO = ResultDAO(context)
-        val results = resultDAO.getAll()
+        val results = resultDAO.getAsync()
 
         results.forEach {
-            if (it.getUploaded() == 0) {
-                insert(it)
-            }
+
+            insert(it)
+
         }
     }
 }
