@@ -3,6 +3,7 @@ package com.mejorappt.equipoa.model
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 
 data class Result(
     val id: Int,
@@ -17,8 +18,10 @@ data class Result(
     fun formatDate(): String =
         SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(date)
 
-    fun formatDate(dateStyle: Int, timeStyle: Int = DateFormat.MEDIUM): String =
-        SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle).format(date)
+    fun formatDate(dateStyle: Int, timeStyle: Int = DateFormat.MEDIUM, timeZone: TimeZone = TimeZone.getDefault()): String =
+        SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle).apply {
+            this.timeZone = timeZone
+        }.format(date)
 
     fun getUploaded(): Int = if (uploaded) 1 else 0
 

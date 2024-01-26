@@ -6,10 +6,11 @@ import com.mejorappt.equipoa.db.UserDAO
 import com.mejorappt.equipoa.model.UserProfile
 
 class FirebaseUser(private val context: Context): Firebase<UserProfile> {
+    @OptIn(ExperimentalStdlibApi::class)
     override fun insert(data: UserProfile) {
-        db.collection("users").document("${data.id}_${data.userName}_${data.formatDate()}").set(data.map())
+        db.collection("users").document("${data.id}_${data.userName}_${data.date.time.toHexString()}").set(data.map())
             .addOnSuccessListener {
-                Log.d("TAG_DATA", "DocumentSnapshot added with ID: ${data.id}_${data.userName}_${data.formatDate()}")
+                Log.d("TAG_DATA", "DocumentSnapshot added with ID: ${data.id}_${data.userName}_${data.date.time.toHexString()}")
                 data.uploaded = 1
                 val userDAO = UserDAO(context)
                 userDAO.update(data)
@@ -19,9 +20,10 @@ class FirebaseUser(private val context: Context): Firebase<UserProfile> {
             }
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     override fun update(data: UserProfile) {
 
-        val docRef = db.collection("users").document("${data.id}_${data.userName}_${data.formatDate()}")
+        val docRef = db.collection("users").document("${data.id}_${data.userName}_${data.date.time.toHexString()}")
 
         db.runTransaction { transition ->
 

@@ -52,4 +52,10 @@
     <string name="user_list_in_this_device">Lista de usuarios en este dispositivo</string>
     <string name="show_user_list">Mostrar usuarios en este dispositivo</string>
     <string name="gender">Género</string>
+    <string name="never">Nunca</string>
+    <string name="few_times">Pocas veces</string>
+    <string name="sometimes">A veces</string>
+    <string name="frequently">Muchas veces</string>
+    <string name="always">Siempre</string>
+    <string name="answer_all_the_questions">Contesta todas las preguntas</string>
 </resources>

@@ -75,7 +75,7 @@ class PreviousResultsActivity : ComponentActivity() {
 
                                     DropDownCard (title = "${getString(R.string.result)} ${result.formatDate(dateStyle = DateFormat.MEDIUM)}") {
 
-                                        Column (modifier = Modifier.align(Alignment.TopCenter)) {
+                                        Column {
 
                                             Factors(levels = levels)
 
@@ -88,7 +88,7 @@ class PreviousResultsActivity : ComponentActivity() {
                                             }
 
                                             startActivity(intent)
-                                        }, modifier = Modifier.align(Alignment.BottomCenter)) {
+                                        }) {
                                             Text(text = getString(R.string.see_advices))
                                         }
                                     }

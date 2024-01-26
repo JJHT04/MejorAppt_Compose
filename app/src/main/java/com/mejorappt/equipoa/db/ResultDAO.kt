@@ -45,7 +45,7 @@ class ResultDAO(context: Context): DAO<Int, Result> {
     fun getAll(userId: Int): List<Result> {
         val results = ArrayList<Result>()
         val db = bh.readableDatabase
-        val c = db.rawQuery("SELECT id, userName, date, factor1, factor2, factor3, uploaded FROM result WHERE userName =?", arrayOf(userId.toString()))
+        val c = db.rawQuery("SELECT id, userName, date, factor1, factor2, factor3, uploaded FROM result WHERE userName =? ORDER BY date DESC", arrayOf(userId.toString()))
 
         if (c.moveToFirst()) {
             do {

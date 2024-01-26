@@ -10,6 +10,7 @@ import org.intellij.lang.annotations.Language
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class UserDAO(context: Context): DAO<Int, UserProfile>{
 
@@ -61,7 +62,7 @@ class UserDAO(context: Context): DAO<Int, UserProfile>{
         if (c.moveToFirst()) {
             do {
                 val icons = getDrawableRes(c.getString(4))
-                users.add(UserProfile(c.getInt(0), c.getString(1), c.getInt(2), genderMap[c.getString(3)]?:Gender.NON_BINARY, icons.first, icons.second, SimpleDateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).parse(c.getString(5))?: Date(), c.getInt(6)))
+                users.add(UserProfile(c.getInt(0), c.getString(1), c.getInt(2), genderMap[c.getString(3)]?:Gender.NON_BINARY, icons.first, icons.second, SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH).parse(c.getString(5))?: Date(), c.getInt(6)))
             } while (c.moveToNext())
         }
 
@@ -81,7 +82,7 @@ class UserDAO(context: Context): DAO<Int, UserProfile>{
                 put("age", it.age)
                 put("gender", it.gender.toString())
                 put("icon", getDrawableName(it.happyIcon))
-                put("date", SimpleDateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(
+                put("date", SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH).format(
                     it.date
                 ))
             }
@@ -147,7 +148,7 @@ class UserDAO(context: Context): DAO<Int, UserProfile>{
         if (c.moveToFirst()) {
             do {
                 val icons = getDrawableRes(c.getString(4))
-                users.add(UserProfile(c.getInt(0), c.getString(1), c.getInt(2), genderMap[c.getString(3)]?:Gender.NON_BINARY, icons.first, icons.second, SimpleDateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).parse(c.getString(5))?: Date(), c.getInt(6)))
+                users.add(UserProfile(c.getInt(0), c.getString(1), c.getInt(2), genderMap[c.getString(3)]?:Gender.NON_BINARY, icons.first, icons.second, SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH).parse(c.getString(5))?: Date(), c.getInt(6)))
             } while (c.moveToNext())
         }
 

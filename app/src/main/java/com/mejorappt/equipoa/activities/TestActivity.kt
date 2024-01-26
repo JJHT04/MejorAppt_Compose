@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,17 +17,23 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.twotone.CheckCircle
+import androidx.compose.material.icons.twotone.Done
 import androidx.compose.material3.Button
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,6 +42,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.db.QuestionDAO
 import com.mejorappt.equipoa.db.ResultDAO
@@ -44,17 +52,22 @@ import com.mejorappt.equipoa.model.Result
 import com.mejorappt.equipoa.testStarted
 import com.mejorappt.equipoa.ui.theme.MejorApptTheme
 import com.mejorappt.equipoa.ui.theme.OnPrimary_alt
+import com.mejorappt.equipoa.ui.theme.Pink80
 import com.mejorappt.equipoa.ui.theme.Purple80
 import com.mejorappt.equipoa.ui.theme.onSecondary_alt
+import com.mejorappt.equipoa.ui.theme.onTertiary
 import com.mejorappt.equipoa.userProfile
 import com.mejorappt.equipoa.util.ActivityBase
+import com.mejorappt.equipoa.util.MultipleLinearProgressIndicator
 import com.mejorappt.equipoa.util.Question
 import com.mejorappt.equipoa.util.RESULTS_EXTRA_MESSAGE
 import com.mejorappt.equipoa.util.ResultCalculator
+import com.mejorappt.equipoa.util.getValuesMap
+import com.mejorappt.equipoa.util.showToast
+import kotlinx.coroutines.launch
 import java.util.Date
 
-var currentProgress by mutableFloatStateOf(0f)
-
+var currentProgress by mutableFloatStateOf(0.15f)
 class TestActivity : ComponentActivity() {
 
     private lateinit var someActivityResultLauncher: ActivityResultLauncher<Intent>
@@ -77,13 +90,12 @@ class TestActivity : ComponentActivity() {
                         navigateUpTo(intent) },
                     iconTint = OnPrimary_alt,
                     topAppBarBg = onSecondary_alt,
-                    containerColor = Purple80) {
+                    containerColor = Purple80) { paddingValues ->
 
                     val questionDAO = QuestionDAO(this)
+                    val nOfQuestionsAnswered = questionDAO.getNumberOfAnsweredQuestions()
 
-                    currentProgress = (questionDAO.getNumberOfAnsweredQuestions().toFloat() / 2) / 10
-
-                    val (validTest, onOptionSelected) = rememberSaveable { mutableStateOf(!questionDAO.isAnyQuestionNotAnswered()) }
+                    currentProgress = (nOfQuestionsAnswered / 20f) * 0.85f + 0.15f
 
                     val questions = questionDAO.getAll()
 
@@ -93,8 +105,10 @@ class TestActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(it)
+                            .padding(paddingValues)
                     ) {
+                        val listState = rememberLazyListState()
+
                         Column (modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(0.82f),
@@ -105,22 +119,31 @@ class TestActivity : ComponentActivity() {
                                 .fillMaxHeight(0.1f)
                                 .padding(top = 10.dp, start = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically) {
-                                Image(painter = painterResource(id = userProfile.happyIcon), contentDescription = "Happy icon", modifier = Modifier
-                                    .fillMaxWidth(0.2f)
-                                    .fillMaxHeight())
-                                LinearProgressIndicator(progress = currentProgress, modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(0.7f)
-                                    .padding(end = 20.dp))
+                                MultipleLinearProgressIndicator(
+                                    primaryProgress = currentProgress,
+                                    secondaryProgress = currentProgress + 0.05f,
+                                    icon = painterResource(id = userProfile.happyIcon)
+                                )
                             }
 
-                            Column(
+                            val firstQuestionUnchecked = getFirstUncheckedQuestion(questions)
+                            LaunchedEffect(key1 = Unit) {
+                                if (firstQuestionUnchecked != null) {
+                                    listState.animateScrollToItem(index = firstQuestionUnchecked.id -1)
+                                }
+                            }
+
+                            LazyColumn(
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .align(Alignment.CenterHorizontally)
+                                    .fillMaxWidth(0.97f)
                                     .fillMaxHeight(0.95f)
-                                    .verticalScroll(rememberScrollState())
+                                    .background(onSecondary_alt, shape = RoundedCornerShape(20.dp))
+                                    .padding(10.dp),
+                                state = listState
                             ) {
-                                for (i in questions.indices) {
+
+                                items(questions.size) {i ->
 
                                     var actualValue by rememberSaveable { mutableIntStateOf(questions[i].answer) }
 
@@ -130,15 +153,16 @@ class TestActivity : ComponentActivity() {
                                                 questions[i].answer = value
                                                 actualValue = value
                                                 questionDAO.update(questions[i])
-                                                onOptionSelected(!questionDAO.isAnyQuestionNotAnswered())
                                                 testStarted = true
                                             }
-                                        }, selectedItem = if (questions[i].answer != -1) questions[i].answer.toString() else null)
+                                        }, selectedItem = if (questions[i].answer != -1) getValuesMap().entries.find { it.value == questions[i].answer }?.key else null)
                                     }
+
                                 }
                             }
-
                         }
+
+                        val scope = rememberCoroutineScope()
 
                         Column(
                             modifier = Modifier
@@ -153,14 +177,28 @@ class TestActivity : ComponentActivity() {
                             ) {
                                 Button(
                                     onClick = {
-                                         btnFinishOnClick(questions, questionDAO)
+
+                                        if (questionDAO.isAnyQuestionNotAnswered()) {
+                                            scope.launch {
+                                                listState.animateScrollToItem(index = (getFirstUncheckedQuestion(questions)?.id
+                                                    ?: 1) -1)
+                                            }
+
+                                            showToast(this@TestActivity, getString(R.string.answer_all_the_questions))
+
+                                        } else {
+                                            btnFinishOnClick(questions, questionDAO)
+                                        }
                                     },
                                     modifier = Modifier
                                         .weight(1f)
                                         .padding(4.dp),
-                                    enabled = validTest
+                                    shape = RoundedCornerShape(10.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = onSecondary_alt, contentColor = OnPrimary_alt),
+                                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                                 ) {
-                                    Text(text = getString(R.string.finish))
+                                    Icon(imageVector = Icons.Rounded.Done, contentDescription = "Icon", modifier = Modifier.padding(end = 10.dp))
+                                    Text(text = getString(R.string.finish), fontSize = 20.sp)
                                 }
                             }
                         }
@@ -172,7 +210,18 @@ class TestActivity : ComponentActivity() {
         }
     }
 
+    private fun getFirstUncheckedQuestion(questions: List<Question>): Question? {
+        questions.forEach {
+            if (it.answer == -1) {
+                return it
+            }
+        }
+
+        return null
+    }
+
     private fun btnFinishOnClick(questions: List<Question>, questionDAO: QuestionDAO) {
+
         val resultDAO = ResultDAO(this)
 
         val sumFactors = getSumFactors(questions)
@@ -192,7 +241,7 @@ class TestActivity : ComponentActivity() {
         questionDAO.clearAll()
 
         testStarted = false
-        currentProgress = 0f
+        currentProgress = 0.25f
 
         someActivityResultLauncher.launch(intent)
     }

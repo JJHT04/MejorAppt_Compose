@@ -51,4 +51,10 @@
     <string name="user_list_in_this_device">User list in this device</string>
     <string name="show_user_list">Show user list in this device</string>
     <string name="gender">Gender</string>
+    <string name="never">Never</string>
+    <string name="few_times">Few times</string>
+    <string name="sometimes">Sometimes</string>
+    <string name="frequently">Frequently</string>
+    <string name="always">Always</string>
+    <string name="answer_all_the_questions">Answer all the questions</string>
 </resources>

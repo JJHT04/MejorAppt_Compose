@@ -201,6 +201,8 @@ class MainActivity : ComponentActivity() {
 
                         if (showRegisterDialog) {
                             RegisterDialog(onDismissRequest = { showRegisterDialog = false }) {
+                                QuestionDAO(this).clearAll()
+                                testStarted = false
                                 showRegisterDialog = false
                             }
                         }
@@ -222,6 +224,8 @@ class MainActivity : ComponentActivity() {
                                             scope.launch {
                                                 DataStoreUtil.saveData(this@MainActivity, it.userName, it.age, it.gender)
                                             }
+                                            QuestionDAO(this).clearAll()
+                                            testStarted = false
                                             showUserListDialog = false
                                             showLoginDialog = false
                                         } else {
@@ -338,22 +342,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun btnPreviousOnClick () {
-        if (userProfile.userExists()) {
-            val intent = Intent(this, PreviousResultsActivity::class.java)
-            startActivity(intent)
-        }else {
-            showToast(this, getString(R.string.not_login_message))
-        }
+        val intent = Intent(this, PreviousResultsActivity::class.java)
+        startActivity(intent)
     }
 
 
     private fun btnTestActivityOnClick() {
-        if (userProfile.userExists()) {
-            val intent = Intent(this, TestActivity::class.java)
-            startActivity(intent)
-        } else {
-            showToast(this, getString(R.string.not_login_message))
-        }
+        val intent = Intent(this, TestActivity::class.java)
+        startActivity(intent)
     }
 
     @Composable

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.ui.theme.MejorApptTheme
 import com.mejorappt.equipoa.ui.theme.OnPrimary_alt
@@ -49,7 +50,7 @@ class UserGuideActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally) {
                         DropDownCard(title = "NEW USER GUIDE NOT IMPLEMENTED YET") {
-                            Text(text = "NEW USER GUIDE NOT IMPLEMENTED YET")
+                            Text(text = "NEW USER GUIDE NOT IMPLEMENTED YET", modifier = Modifier.padding(bottom = 20.dp, top = 20.dp))
                         }
                     }
                 }

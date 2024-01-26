@@ -15,6 +15,7 @@ import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.enums.Gender
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.random.Random
 
 data class UserProfile(val id: Int, val userName:String, val age:Int, val gender: Gender, @DrawableRes val happyIcon: Int, @DrawableRes val annoyedIcon:Int, val date: Date = Date(), var uploaded: Int = 0) {
 
@@ -39,7 +40,7 @@ data class UserProfile(val id: Int, val userName:String, val age:Int, val gender
     }
 
     fun userExists(): Boolean {
-        return userName.isNotBlank()
+        return id != 0
     }
 
     fun formatDate(): String = SimpleDateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(date)
@@ -51,6 +52,7 @@ data class UserProfile(val id: Int, val userName:String, val age:Int, val gender
     )
 
     companion object {
-        val EMPTY_USER = UserProfile(0, "", 0, Gender.NON_BINARY, R.drawable.non_binary_icon_happy, R.drawable.non_binary_icon_annoyed)
+        @OptIn(ExperimentalStdlibApi::class)
+        val EMPTY_USER = UserProfile(0, "Anónimo@${Random.Default.nextInt().toHexString()}", 0, Gender.NON_BINARY, R.drawable.non_binary_icon_happy, R.drawable.non_binary_icon_annoyed, uploaded = 1)
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.model.Advice
 import com.mejorappt.equipoa.model.Result
@@ -36,11 +35,10 @@ object ResultCalculator {
     private fun Advice(index: Int, advices: List<Advice>) {
         val i = index - 1
 
-        Card (modifier = Modifier.padding(10.dp)) {
-            HtmlText(html = advices[i].adviceTitle, modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp))
+        DropDownCard (title = advices[i].adviceTitle) {
+
             Divider()
+
             HtmlText(html = advices[i].adviceBody, modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp))
@@ -154,7 +152,7 @@ object ResultCalculator {
                 .padding(10.dp)) {
             Text(text = text, textAlign = TextAlign.Center, modifier = Modifier
                 .padding(10.dp)
-                .fillMaxWidth(), fontSize = 20.sp)
+                .fillMaxWidth())
         }
     }
 

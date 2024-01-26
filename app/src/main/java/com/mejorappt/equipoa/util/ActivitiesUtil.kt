@@ -1,22 +1,25 @@
 package com.mejorappt.equipoa.util
 
 import android.content.Context
+import android.graphics.text.LineBreaker
+import android.os.Build
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,7 +41,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -51,6 +57,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
@@ -216,37 +223,44 @@ fun RadioGroup(radioOptions: List<String>, onClick: (Int?) -> Unit, selectedItem
             .selectableGroup()
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         radioOptions.forEach { text ->
-            RadioButton(
-                selected = (text == selectedOption),
-                onClick = {
+            Column (horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(bottom = 10.dp)) {
+                val valuesMap = getValuesMap()
+                RadioButton(
+                    selected = (text == selectedOption),
+                    onClick = {
 
-                    if (selectedItem == null) {
-                        currentProgress += 0.05f
+                        if (selectedItem == null) {
+                            currentProgress += 1f / (0.85f * 20f)
+                        }
+                        onOptionSelected(text)
+                        onClick(valuesMap[text])
                     }
-                    onOptionSelected(text)
-                    onClick(text.toIntOrNull())
-                }
-            )
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodyLarge
-            )
+                )
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontSize = 12.sp
+                )
+            }
         }
     }
 }
 
 @Composable
-fun Question(text: String, onClick: (Int?) -> Unit, selectedItem: String? = null, error: Boolean = false) {
-    val radioOptions = listOf("0","1","2","3","4")
-    Card (modifier = Modifier.padding(10.dp)){
+fun Question(modifier: Modifier = Modifier, text: String, onClick: (Int?) -> Unit, selectedItem: String? = null, error: Boolean = false) {
+    val radioOptions = listOf(stringResource(id = R.string.never), stringResource(id = R.string.few_times), stringResource(R.string.sometimes), stringResource(R.string.frequently), stringResource(R.string.always))
+    Card (modifier = modifier.padding(10.dp)){
         Text(text = text, modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
             .align(Alignment.CenterHorizontally),
-            color = if (error) Color.Red else Color.Black)
+            color = if (error) Color.Red else Color.Black,
+            textAlign = TextAlign.Justify)
         RadioGroup(radioOptions = radioOptions, onClick = onClick, selectedItem = selectedItem)
     }
 }
@@ -262,46 +276,89 @@ fun HtmlText(html: String, modifier: Modifier = Modifier) {
             text = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
             movementMethod = LinkMovementMethodCompat.getInstance()
             typeface = ResourcesCompat.getFont(currentContext, R.font.lexend)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+            }
         }}
     )
 }
 
 @Composable
-fun DropDownCard(title: String, maxHeight: Float = 200f, expandedContent: @Composable (BoxScope.() -> Unit)) {
+fun DropDownCard(title: String, expandedContent: @Composable (ColumnScope.() -> Unit)) {
     var expanded by rememberSaveable { mutableStateOf(false) }
-    val heightState = animateFloatAsState(
-        targetValue = if (expanded) maxHeight else 50f,
-        animationSpec = tween(durationMillis = 300), label = ""
-    )
 
     Card(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth()
-            .height(heightState.value.dp)
+            .fillMaxSize()
+            .animateContentSize(tween(durationMillis = 400))
             .clickable { expanded = !expanded }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
+
             // Always on display text
-            Text(
-                text = title,
-                modifier = Modifier.padding(16.dp)
+            Text(text = title, modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+                textAlign = TextAlign.Center,
             )
 
-            // Drop down content
-            Box(
-                modifier = Modifier
-                    .height(heightState.value.dp)
-                    .padding(16.dp)
-            ) {
-                if (expanded) {
-                    expandedContent(this)
-                }
+            if (expanded) {
+                // Display Text
+                expandedContent()
             }
+        }
+    }
+}
+
+@Composable
+fun getValuesMap(): Map<String, Int> {
+    return hashMapOf(
+        stringResource(R.string.never) to 0,
+        stringResource(R.string.few_times) to 1,
+        stringResource(R.string.sometimes) to 2,
+        stringResource(R.string.frequently) to 3,
+        stringResource(R.string.always) to 4
+    )
+}
+
+@Composable
+fun MultipleLinearProgressIndicator(
+    modifier: Modifier = Modifier,
+    primaryProgress: Float,
+    secondaryProgress: Float,
+    primaryColor: Color = Purple80,
+    secondaryColor: Color = OnPrimary_alt,
+    backgroundColor: Color = onSecondary_alt,
+    clipShape: Shape = RoundedCornerShape(16.dp),
+    icon: Painter
+) {
+    Box(
+        modifier = modifier
+            .clip(clipShape)
+            .background(backgroundColor)
+            .fillMaxWidth()
+    ) {
+
+        Box(
+            modifier = Modifier
+                .background(secondaryColor, clipShape)
+                .fillMaxHeight()
+                .fillMaxWidth(secondaryProgress)
+        )
+
+        Box(
+            modifier = Modifier
+                .background(primaryColor, clipShape)
+                .fillMaxHeight()
+                .fillMaxWidth(primaryProgress)
+        ) {
+            Image(painter = icon, contentDescription = "Icon", modifier = Modifier.align(Alignment.CenterEnd))
         }
     }
 }
