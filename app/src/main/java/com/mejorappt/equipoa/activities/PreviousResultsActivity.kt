@@ -12,10 +12,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.List
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -88,7 +92,11 @@ class PreviousResultsActivity : ComponentActivity() {
                                             }
 
                                             startActivity(intent)
-                                        }) {
+                                        }, modifier = Modifier.padding(bottom = 10.dp, top = 10.dp),
+                                            shape = RoundedCornerShape(10.dp),
+                                            colors = ButtonDefaults.buttonColors(onSecondary_alt, OnPrimary_alt)
+                                        ) {
+                                            Icon(imageVector = Icons.Rounded.List, contentDescription = "Rounded Icon", modifier = Modifier.padding(end = 10.dp))
                                             Text(text = getString(R.string.see_advices))
                                         }
                                     }

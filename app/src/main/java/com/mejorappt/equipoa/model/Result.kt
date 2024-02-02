@@ -3,6 +3,7 @@ package com.mejorappt.equipoa.model
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 
 data class Result(
@@ -16,7 +17,7 @@ data class Result(
 ) {
 
     fun formatDate(): String =
-        SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(date)
+        SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, Locale.ENGLISH).format(date)
 
     fun formatDate(dateStyle: Int, timeStyle: Int = DateFormat.MEDIUM, timeZone: TimeZone = TimeZone.getDefault()): String =
         SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle).apply {
@@ -39,7 +40,7 @@ data class Result(
 
     companion object {
         fun parseDate(str: String): Date? =
-            SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).parse(str)
+            SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, Locale.ENGLISH).parse(str)
     }
 
 }
