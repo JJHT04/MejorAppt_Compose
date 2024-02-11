@@ -55,9 +55,15 @@
     <string name="never">Nunca</string>
     <string name="few_times">Pocas veces</string>
     <string name="sometimes">A veces</string>
-    <string name="frequently">Muchas veces</string>
+    <string name="frequently">A menudo</string>
     <string name="always">Siempre</string>
     <string name="answer_all_the_questions">Contesta todas las preguntas</string>
     <string name="test_user_guide_footer">Necesitas responder todas las preguntas; todas las preguntas sin respuesta se marcarán con un color rojo. Si omites una pregunta, puedes hacer clic en el botón de finalizar, y se desplazará automáticamente a la primera pregunta que hayas omitido.</string>
     <string name="test_user_guide_header">Cuando hagas clic en Empezar/Reanudar test, serás redirigido a un cuestionario con 20 preguntas, y tendrás 5 posibles respuestas</string>
+    <string name="header_users_guide_1">"Si presionas las tres rayas de arriba a la izquierda te llevará al menu de usuarios "</string>
+    <string name="header_users_guide_2">Donde puedes crear, modificar y iniciar sesión con un usuario, también podrás ver una lista con los usuarios que hay en tu dispositivo</string>
+    <string name="header_users_guide_3">No hace falta crear un usuario para usar la aplicación, los test se subiran como anónimo</string>
+    <string name="welcome_female">Bienvenida</string>
+    <string name="welcome_non_binary">Bienvenid@</string>
+    <string name="users_title_guide">Usuarios</string>
 </resources>

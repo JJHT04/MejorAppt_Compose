@@ -99,7 +99,7 @@ class TestActivity : ComponentActivity() {
 
                     val questions = questionDAO.getAll()
 
-                    Image(painter = painterResource(id = R.drawable.home), contentDescription = "Landscape",
+                    Image(painter = painterResource(id = R.drawable.background_test), contentDescription = "Landscape",
                         modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
 
                     Box(

@@ -5,11 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Divider
@@ -34,6 +33,8 @@ class UserGuideActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val listState = rememberLazyListState()
+
             MejorApptTheme {
                 ActivityBase (title = stringResource(id = R.string.title_activity_user_guide), menuIconImage = Icons.Rounded.ArrowBack,
                     navigationIconOnClick = { navigateUpTo(intent) },
@@ -41,42 +42,44 @@ class UserGuideActivity : ComponentActivity() {
                     topAppBarBg = onSecondary_alt,
                     containerColor = Purple80
                 ) {
-                    Image(painter = painterResource(id = R.drawable.home), contentDescription = "Landscape",
+                    Image(painter = painterResource(id = R.drawable.background_user_guide), contentDescription = "Landscape",
                         modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
 
-                    Column (modifier = Modifier
-                        .fillMaxSize()
-                        .padding(it)
-                        .verticalScroll(
-                            rememberScrollState()
-                        ),
+                    LazyColumn (modifier = Modifier
+                        .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        DropDownCard(title = stringResource(id = R.string.title_activity_test)) {
-                            Divider()
-                            Text(
-                                "${getString(R.string.test_user_guide_header)}:\n" +
-                                    "-${stringResource(id = R.string.never)}\n" +
-                                    "-${stringResource(id = R.string.few_times)}\n" +
-                                    "-${stringResource(id = R.string.sometimes)}\n" +
-                                    "-${stringResource(id = R.string.frequently)}\n" +
-                                    "-${stringResource(id = R.string.always)}\n" +
-                                    getString(R.string.test_user_guide_footer),
-                                textAlign = TextAlign.Justify,
-                                fontSize = 14.sp,
-                                modifier = Modifier.padding(15.dp))
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        contentPadding = it,
+                        state = listState) {
+                        item {
+                            DropDownCard(title = stringResource(id = R.string.title_activity_test)) {
+                                Divider()
+                                Text(
+                                    "${getString(R.string.test_user_guide_header)}:\n" +
+                                            "-${stringResource(id = R.string.never)}\n" +
+                                            "-${stringResource(id = R.string.few_times)}\n" +
+                                            "-${stringResource(id = R.string.sometimes)}\n" +
+                                            "-${stringResource(id = R.string.frequently)}\n" +
+                                            "-${stringResource(id = R.string.always)}\n" +
+                                            getString(R.string.test_user_guide_footer),
+                                    textAlign = TextAlign.Justify,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(15.dp))
+                            }
                         }
-                        
-                        DropDownCard(title = "Users") {
-                            Divider()
-                            Text(text = buildString {
-                                append("If you click the three lines on the top left corner, you will see the users menu ")
-                                append("where you can add, edit and see the list of users in your device.\n")
-                                append("There is no need to create an user, the app will submit your test results as an anonymous user.")
-                            },
-                                textAlign = TextAlign.Justify,
-                                fontSize = 14.sp,
-                                modifier = Modifier.padding(15.dp))
+
+                        item {
+                            DropDownCard(title = getString(R.string.users_title_guide)) {
+                                Divider()
+                                Text(text = buildString {
+                                    append(getString(R.string.header_users_guide_1))
+                                    append(getString(R.string.header_users_guide_2))
+                                    append(getString(R.string.header_users_guide_3))
+                                },
+                                    textAlign = TextAlign.Justify,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(15.dp))
+                            }
                         }
                     }
                 }

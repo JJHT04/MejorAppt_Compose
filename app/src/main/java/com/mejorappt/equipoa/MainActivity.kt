@@ -69,6 +69,7 @@ import com.mejorappt.equipoa.db.UserDAO
 import com.mejorappt.equipoa.dialogs.ModifyDialog
 import com.mejorappt.equipoa.dialogs.RegisterDialog
 import com.mejorappt.equipoa.dialogs.UserListDialog
+import com.mejorappt.equipoa.enums.Gender
 import com.mejorappt.equipoa.firebase.FirebaseResult
 import com.mejorappt.equipoa.firebase.FirebaseUser
 import com.mejorappt.equipoa.model.UserProfile
@@ -133,7 +134,13 @@ class MainActivity : ComponentActivity() {
                             drawerContentColor = OnPrimary
                         ) {
                             Text(
-                                "${stringResource(id = R.string.welcome)} ${nombreUsuario ?: ""}!",
+                                "${
+                                    when(userProfile.gender) {
+                                        Gender.MALE -> {getString(R.string.welcome)}
+                                        Gender.FEMALE -> {getString(R.string.welcome_female)}
+                                        else -> {getString(R.string.welcome_non_binary)}
+                                    }
+                                } ${nombreUsuario ?: ""}!",
                                 modifier = Modifier.padding(16.dp)
                             )
                             Divider()
@@ -197,6 +204,8 @@ class MainActivity : ComponentActivity() {
                         iconOnclick = { annoyed = !annoyed; showBottomSheet.value = true },
                         title = titleName,
                         subTitle = subTitle,
+                        topAppBarBg = onSecondary_alt,
+                        iconTint = OnPrimary_alt,
                     ) {
 
                         if (showRegisterDialog) {
@@ -244,7 +253,7 @@ class MainActivity : ComponentActivity() {
                         BottomSheet(showBottomSheet = showBottomSheet)
 
                         Image(
-                            painter = painterResource(id = R.drawable.home),
+                            painter = painterResource(id = R.drawable.background_home),
                             contentDescription = "Home background",
                             modifier = Modifier
                                 .fillMaxHeight(0.7f)

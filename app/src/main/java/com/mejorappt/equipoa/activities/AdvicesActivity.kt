@@ -46,7 +46,7 @@ class AdvicesActivity : ComponentActivity() {
                     topAppBarBg = onSecondary_alt,
                     containerColor = Purple80) {
 
-                    Image(painter = painterResource(id = R.drawable.home), contentDescription = "Landscape",
+                    Image(painter = painterResource(id = R.drawable.background_advices), contentDescription = "Landscape",
                         modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
 
                     Box(modifier = Modifier

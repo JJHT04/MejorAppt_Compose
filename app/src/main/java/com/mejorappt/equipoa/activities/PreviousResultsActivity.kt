@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,7 +58,7 @@ class PreviousResultsActivity : ComponentActivity() {
                     topAppBarBg = onSecondary_alt,
                     containerColor = Purple80) {
 
-                    Image(painter = painterResource(id = R.drawable.home), contentDescription = "Landscape",
+                    Image(painter = painterResource(id = R.drawable.background_previous_results), contentDescription = "Landscape",
                         modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
 
 
@@ -103,14 +104,16 @@ class PreviousResultsActivity : ComponentActivity() {
 
                                 }
                             } else {
-                                Text(
-                                    text = getString(R.string.there_are_no_previous_results),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(10.dp)
-                                        .align(Alignment.CenterHorizontally),
-                                    textAlign = TextAlign.Center
-                                )
+                                Box (Modifier.padding(10.dp).background(color = onSecondary_alt, RoundedCornerShape(10.dp))) {
+                                    Text(
+                                        text = getString(R.string.there_are_no_previous_results),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(10.dp)
+                                            .align(Alignment.Center),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
 
                         }

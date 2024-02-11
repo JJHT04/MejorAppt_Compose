@@ -290,7 +290,7 @@ fun HtmlText(html: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun DropDownCard(title: String, expandedContent: @Composable (ColumnScope.() -> Unit)) {
+fun DropDownCard(title: String, onClick: (() -> Unit)? = null, expandedContent: @Composable (ColumnScope.() -> Unit)) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -300,10 +300,15 @@ fun DropDownCard(title: String, expandedContent: @Composable (ColumnScope.() -> 
             .animateContentSize(
                 spring(
                     dampingRatio = Spring.DampingRatioLowBouncy,
-                    Spring.StiffnessLow
+                    Spring.StiffnessMediumLow
                 )
             )
-            .clickable { expanded = !expanded }
+            .clickable {
+                expanded = !expanded
+                if (onClick != null) {
+                    onClick()
+                }
+            }
     ) {
         Column(
             modifier = Modifier
