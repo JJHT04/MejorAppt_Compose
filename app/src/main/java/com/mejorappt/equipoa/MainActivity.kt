@@ -196,7 +196,7 @@ class MainActivity : ComponentActivity() {
                         iconImage = icon,
                         iconOnclick = { annoyed = !annoyed; showBottomSheet.value = true },
                         title = titleName,
-                        subTitle = subTitle
+                        subTitle = subTitle,
                     ) {
 
                         if (showRegisterDialog) {
@@ -277,7 +277,7 @@ class MainActivity : ComponentActivity() {
                                     color = OnPrimary_alt,
                                     modifier = Modifier
                                         .align(Alignment.CenterHorizontally)
-                                        .padding(top = 10.dp, start = 50.dp, end = 50.dp),
+                                        .padding(top = 10.dp, start = 40.dp, end = 40.dp),
                                     fontSize = 14.sp,
                                     textAlign = TextAlign.Center
                                 )

@@ -23,16 +23,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Done
-import androidx.compose.material.icons.twotone.CheckCircle
-import androidx.compose.material.icons.twotone.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -52,10 +52,8 @@ import com.mejorappt.equipoa.model.Result
 import com.mejorappt.equipoa.testStarted
 import com.mejorappt.equipoa.ui.theme.MejorApptTheme
 import com.mejorappt.equipoa.ui.theme.OnPrimary_alt
-import com.mejorappt.equipoa.ui.theme.Pink80
 import com.mejorappt.equipoa.ui.theme.Purple80
 import com.mejorappt.equipoa.ui.theme.onSecondary_alt
-import com.mejorappt.equipoa.ui.theme.onTertiary
 import com.mejorappt.equipoa.userProfile
 import com.mejorappt.equipoa.util.ActivityBase
 import com.mejorappt.equipoa.util.MultipleLinearProgressIndicator
@@ -63,7 +61,6 @@ import com.mejorappt.equipoa.util.Question
 import com.mejorappt.equipoa.util.RESULTS_EXTRA_MESSAGE
 import com.mejorappt.equipoa.util.ResultCalculator
 import com.mejorappt.equipoa.util.getValuesMap
-import com.mejorappt.equipoa.util.showToast
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -83,6 +80,8 @@ class TestActivity : ComponentActivity() {
         }
 
         setContent {
+            val snackBarHostState = remember { SnackbarHostState() }
+
             MejorApptTheme {
 
                 ActivityBase(title = stringResource(id = R.string.title_activity_test), menuIconImage = Icons.Rounded.ArrowBack,
@@ -90,7 +89,8 @@ class TestActivity : ComponentActivity() {
                         navigateUpTo(intent) },
                     iconTint = OnPrimary_alt,
                     topAppBarBg = onSecondary_alt,
-                    containerColor = Purple80) { paddingValues ->
+                    containerColor = Purple80,
+                    snackBarHostState = snackBarHostState) { paddingValues ->
 
                     val questionDAO = QuestionDAO(this)
                     val nOfQuestionsAnswered = questionDAO.getNumberOfAnsweredQuestions()
@@ -182,9 +182,9 @@ class TestActivity : ComponentActivity() {
                                             scope.launch {
                                                 listState.animateScrollToItem(index = (getFirstUncheckedQuestion(questions)?.id
                                                     ?: 1) -1)
-                                            }
 
-                                            showToast(this@TestActivity, getString(R.string.answer_all_the_questions))
+                                                snackBarHostState.showSnackbar(getString(R.string.answer_all_the_questions))
+                                            }
 
                                         } else {
                                             btnFinishOnClick(questions, questionDAO)

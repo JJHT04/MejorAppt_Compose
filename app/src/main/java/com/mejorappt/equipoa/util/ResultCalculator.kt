@@ -59,11 +59,7 @@ object ResultCalculator {
         ) {
 
             if (seeFactors) {
-                Card(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    ) {
+                DropDownCard(stringResource(R.string.results)) {
                     Factors(levels = levels, modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp))
@@ -258,7 +254,6 @@ object ResultCalculator {
     @Composable
     private fun Factors(modifier: Modifier = Modifier, levels: Array<String>) {
         val context = LocalContext.current
-        Text(text = stringResource(R.string.results), modifier = modifier, textAlign = TextAlign.Center)
         Divider()
         Text(text = "${context.getString(R.string.pysh_factor)}: ${getLeveLStringLocale(levels[0], context)}", modifier = modifier, textAlign = TextAlign.Center)
         Text(text = "${context.getString(R.string.cog_factor)}: ${getLeveLStringLocale(levels[1], context)}", modifier = modifier, textAlign = TextAlign.Center)

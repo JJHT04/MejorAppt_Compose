@@ -12,13 +12,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mejorappt.equipoa.R
 import com.mejorappt.equipoa.ui.theme.MejorApptTheme
 import com.mejorappt.equipoa.ui.theme.OnPrimary_alt
@@ -47,10 +50,33 @@ class UserGuideActivity : ComponentActivity() {
                         .verticalScroll(
                             rememberScrollState()
                         ),
-                        verticalArrangement = Arrangement.SpaceEvenly,
+                        verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally) {
-                        DropDownCard(title = "NEW USER GUIDE NOT IMPLEMENTED YET") {
-                            Text(text = "NEW USER GUIDE NOT IMPLEMENTED YET", modifier = Modifier.padding(bottom = 20.dp, top = 20.dp))
+                        DropDownCard(title = stringResource(id = R.string.title_activity_test)) {
+                            Divider()
+                            Text(
+                                "${getString(R.string.test_user_guide_header)}:\n" +
+                                    "-${stringResource(id = R.string.never)}\n" +
+                                    "-${stringResource(id = R.string.few_times)}\n" +
+                                    "-${stringResource(id = R.string.sometimes)}\n" +
+                                    "-${stringResource(id = R.string.frequently)}\n" +
+                                    "-${stringResource(id = R.string.always)}\n" +
+                                    getString(R.string.test_user_guide_footer),
+                                textAlign = TextAlign.Justify,
+                                fontSize = 14.sp,
+                                modifier = Modifier.padding(15.dp))
+                        }
+                        
+                        DropDownCard(title = "Users") {
+                            Divider()
+                            Text(text = buildString {
+                                append("If you click the three lines on the top left corner, you will see the users menu ")
+                                append("where you can add, edit and see the list of users in your device.\n")
+                                append("There is no need to create an user, the app will submit your test results as an anonymous user.")
+                            },
+                                textAlign = TextAlign.Justify,
+                                fontSize = 14.sp,
+                                modifier = Modifier.padding(15.dp))
                         }
                     }
                 }
